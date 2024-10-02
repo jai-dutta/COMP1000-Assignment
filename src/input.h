@@ -9,7 +9,7 @@ typedef enum {
     UNDO = 'u'
 } Controls;
 
-// forward declarations
+
 void disableBuffer();
 void enableBuffer();
 char get_input();

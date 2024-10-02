@@ -27,6 +27,9 @@ int main(int argc, const char* argv[]) {
         printf("Error reading map");
         return 1;
     }
-    print_map(map);
+    while(1) {
+        print_map(map);
+        move_player(map);
+    }
     return 0;
 }

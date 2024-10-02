@@ -16,6 +16,9 @@ typedef enum {
 typedef struct {
     int rows, cols;
     int **data;
+    int* player_cell;
+    int* snake_cell;
+    int* lantern_cell;
 } Map;
 
 /* Forward Declarations */

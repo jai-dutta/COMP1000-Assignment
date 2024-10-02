@@ -32,7 +32,7 @@
 
 - [ ] Create a main game loop incorporating input, printing, RNG, and LinkedList insertions
 
-- [ ] Change locations of objects on the map using input
+- [X] Change locations of objects on the map using input
 
 - [ ] Polish/extra features
 

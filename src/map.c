@@ -5,9 +5,26 @@ Map* create_map(FILE* map_file) {
     int i, j;
     Map* map;
 
+
+
     map = (Map *)malloc(sizeof(Map));
     if(map == NULL) {
         printf("Error allocating memory for map\n");
+        return NULL;
+    }
+    map->player_cell = (int *)malloc(sizeof(map->player_cell));
+    if(map->player_cell == NULL) {
+        printf("Error allocating memory for player position!");
+        return NULL;
+    }
+    map->snake_cell = (int *)malloc(sizeof(map->snake_cell));
+    if(map->snake_cell == NULL) {
+        printf("Error allocating memory for snake position!");
+        return NULL;
+    }
+    map->lantern_cell = (int *)malloc(sizeof(map->lantern_cell));
+    if(map->lantern_cell == NULL) {
+        printf("Error allocating memory for lantern position!");
         return NULL;
     }
 
@@ -53,9 +70,9 @@ int read_map(FILE* map_file, Map* map) {
     /* Read in the map */
     for(i=0; i<map->rows; i++) {
         for(j=0; j<map->cols; j++) {
+
             /* Read integer value and handle reading errors.*/
             successful_scan = fscanf(map_file, "%d", &map->data[i][j]);
-
             if (successful_scan != 1) {
                 /* Check for errors and set errno accordingly */
                 if (ferror(map_file)) {
@@ -74,7 +91,22 @@ int read_map(FILE* map_file, Map* map) {
                 return 1;
             }
 
+            /* Find spawn locations of objects */
+            if(map->data[i][j] == PLAYER) {
+                map->player_cell[0] = i;
+                map->player_cell[1] = j;
+            }
+            if(map->data[i][j] == SNAKE) {
+                map->snake_cell[0] = i;
+                map->snake_cell[1] = j;
+            }
+            if(map->data[i][j] == LANTERN) {
+                map->lantern_cell[0] = i;
+                map->lantern_cell[1] = j;
+            }
+
         }
+
     }
     return 0;
 }
@@ -84,7 +116,7 @@ void print_map(Map* map) {
     int i, j;
 
     /* Clear screen */
-    system("cls");
+    system("clear");
 
     /* +2 as the border goes around the edge of the playable map. */
     for(i=0; i < map->cols + 2; i++) {
