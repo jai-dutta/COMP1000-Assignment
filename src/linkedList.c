@@ -1,4 +1,6 @@
 #include "linkedList.h"
+#include<stdio.h>
+#include<stdlib.h>
 
 
 /*
@@ -125,7 +127,6 @@ void* remove_last(LinkedList* ll) {
 
     return retval;
 }
-//! PROBS NOT NEEDED x
 /* 
 void print_linked_list(LinkedList* ll, listFunc funcPtr) {
     ListNode* current = ll->head;
