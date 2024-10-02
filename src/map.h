@@ -19,6 +19,7 @@ typedef struct {
     int* player_cell;
     int* snake_cell;
     int* lantern_cell;
+    int lantern_move_counter;
 } Map;
 
 /* Forward Declarations */

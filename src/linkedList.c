@@ -21,6 +21,15 @@ void free_node(void *data) {
     free(data);
 }
 
+void free_2d_array(int **data, int rows) {
+    int i;
+    for(i = 0; i<rows;i++) {
+        free(data[i]);
+    }
+    free(data);
+    data = NULL;
+}
+
 LinkedList* create_linked_list() {
     LinkedList* linked_list = (LinkedList *)malloc(sizeof(LinkedList));
     linked_list->count = 0;

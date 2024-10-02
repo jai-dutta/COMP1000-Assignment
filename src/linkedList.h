@@ -8,7 +8,7 @@ typedef struct ListNode {
 } ListNode;
 
 /* Linked List Struct */
-typedef struct {
+typedef struct LinkedList{
     int count;
     ListNode* head;
     ListNode* tail;
@@ -27,4 +27,5 @@ void insert_last(LinkedList* ll, void* data);
 void* remove_last(LinkedList* ll);
 void print_linked_list(LinkedList* ll, listFunc funcPtr);
 void free_linked_list(LinkedList* ll, listFunc funcPtr);
+void free_2d_array(int **data, int rows);
 #endif

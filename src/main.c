@@ -1,10 +1,13 @@
 #include "game.h"
 #include "map.h"
+#include "linkedList.h"
 #include <stdio.h> /*TEMP*/
 #include <string.h>
 
 int main(int argc, const char* argv[]) {
     Map* map;
+    LinkedList* game_ll = create_linked_list();
+    bool player_move;
     FILE* map_file;
     /* Argument Check */
     if(argc != 2) {
@@ -29,7 +32,12 @@ int main(int argc, const char* argv[]) {
     }
     while(1) {
         print_map(map);
-        move_player(map);
+        player_move = move_player(game_ll, map);
+        if(player_move) {
+            move_snake(map);
+            pickup_lantern(map);
+            insert_start(game_ll, map);
+        }
     }
     return 0;
 }
