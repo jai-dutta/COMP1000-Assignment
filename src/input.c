@@ -2,7 +2,7 @@
 #include<termios.h>
 #include "input.h"
 
-void disableBuffer() {
+void disableBuffer(void) {
     struct termios mode;
 
     tcgetattr(0, &mode);
@@ -10,7 +10,7 @@ void disableBuffer() {
     tcsetattr(0, TCSANOW, &mode);
 }
 
-void enableBuffer() {
+void enableBuffer(void) {
     struct termios mode;
 
     tcgetattr(0, &mode);
@@ -18,7 +18,7 @@ void enableBuffer() {
     tcsetattr(0, TCSANOW, &mode);
 }
 
-char get_input() {
+char get_input(void) {
     char button;
     
     scanf(" %c", &button);

@@ -10,8 +10,8 @@ typedef enum {
 } Controls;
 
 
-void disableBuffer();
-void enableBuffer();
-char get_input();
+void disableBuffer(void);
+void enableBuffer(void);
+char get_input(void);
 
 #endif

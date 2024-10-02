@@ -30,7 +30,7 @@ void free_2d_array(int **data, int rows) {
     data = NULL;
 }
 
-LinkedList* create_linked_list() {
+LinkedList* create_linked_list(void) {
     LinkedList* linked_list = (LinkedList *)malloc(sizeof(LinkedList));
     linked_list->count = 0;
     linked_list->head = NULL;
@@ -75,15 +75,14 @@ void* remove_start(LinkedList* ll) {
         ll->count = 0;
         return retval;
     }
-
+    retval = ll->head->value;
     ll->head = ll->head->next;
     ll->head->prev = NULL;
     ll->count--;
 
-    retval = removed_node->value;
+    
     
     free(removed_node);
-    removed_node = NULL;
 
     return retval;
 }
@@ -136,7 +135,6 @@ void* remove_last(LinkedList* ll) {
 
     return retval;
 }
-/* 
 void print_linked_list(LinkedList* ll, listFunc funcPtr) {
     ListNode* current = ll->head;
     printf("LinkedList count: %d \n", ll->count);
@@ -144,7 +142,7 @@ void print_linked_list(LinkedList* ll, listFunc funcPtr) {
         funcPtr(current->value);
         current = current->next;
     }
-}*/
+}
 
 void free_linked_list(LinkedList* ll, listFunc funcPtr) {
     ListNode* current = ll->head;

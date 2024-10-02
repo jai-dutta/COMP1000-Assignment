@@ -1,7 +1,7 @@
 #include "random.h"
 #include <stdlib.h>
 
-int* gen_direction() {
+int* gen_direction(void) {
     int* direction = (int *)malloc(sizeof(int) * 2);
     int random = rand() % 8;
     switch(random) {

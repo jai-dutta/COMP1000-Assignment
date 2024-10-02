@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
 typedef enum {
     EMPTY = 0,
     WALL = 1,
@@ -19,12 +19,13 @@ typedef struct {
     int* player_cell;
     int* snake_cell;
     int* lantern_cell;
-    int lantern_move_counter;
+    int lantern_found;
 } Map;
 
 /* Forward Declarations */
 Map* create_map(FILE* map_file);
 int read_map(FILE* map_file, Map* map);
 void print_map(Map* map);
-
+Map* copy_map(Map* original);
+void free_map(Map* map);
 #endif

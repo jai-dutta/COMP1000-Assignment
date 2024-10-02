@@ -3,9 +3,8 @@
 #include "map.h"
 #include "linkedList.h"
 #include "random.h"
-#include <stdbool.h>
 
-Controls process_input() {
+Controls process_input(void) {
     Controls control;
     disableBuffer();
     control = get_input();
@@ -13,80 +12,82 @@ Controls process_input() {
     return control;
 }
 
-void undo_turn(LinkedList* ll, Map* map) {
+void undo_turn(LinkedList* ll, Map** map) {
     Map* prevMap = (Map*) remove_start(ll);
-    printf("%d ", prevMap->player_cell[0]);
-    *map = prevMap;
+    if(prevMap != NULL) {
+        printf("Current x: %d Current Y: %d \n", (*map)->player_cell[0], (*map)->player_cell[1]);
+        printf("Previous x: %d Previous Y: %d \n", prevMap->player_cell[0], prevMap->player_cell[1]);
+
+        free_map(*map);
+        *map = prevMap;
+    }
 }
-void game_over() {
+void game_over(void) {
     exit(1);
     /* TO DO*/
 }
 
 void pickup_lantern(Map* map) {
-    map->lantern_move_counter = 6;
+    map->lantern_found = 1;
 }
 
-bool carrying_lantern(Map* map) {
-    if(0 < map->lantern_move_counter) {
-        map->lantern_move_counter = map->lantern_move_counter - 1;
+void carrying_lantern(Map* map) {
         map->lantern_cell[0] = map->player_cell[0];
         map->lantern_cell[1] = map->player_cell[1];
         map->data[map->lantern_cell[0]][map->lantern_cell[1]] = map->data[map->player_cell[0]][map->player_cell[1]];
-        return true;
-    } else {
-        return false;
-    }
 }
 /* Returns 1 if player moved */
-bool move_player(LinkedList* ll, Map* map) {
+int move_player(LinkedList* ll, Map** map) {
     Controls direction = process_input();
-    int player_x = map->player_cell[0];
-    int player_y = map->player_cell[1];
+    int player_x = (*map)->player_cell[0];
+    int player_y = (*map)->player_cell[1];
 
     switch(direction) {
         case UP:
-                player_x--;
-                break;
+            player_x--;
+            break;
         case DOWN:
-                player_x++;
-                break;
+            player_x++;
+            break;
         case LEFT:
-                player_y--;
-                break;
+            player_y--;
+            break;
         case RIGHT:
-                player_y++;
-                break;
+            player_y++;
+            break;
         case UNDO:
-                undo_turn(ll, map);
-                break;
+            undo_turn(ll, map);
+            return -1;
+        default: return 0;
     }
+
     /* Movement checks */
-    if(0 <= player_x && player_x < map->rows && 0 <= player_y && player_y < map->cols) {
-        if(map->data[player_x][player_y] == EMPTY) {
-            carrying_lantern(map);
-            map->data[player_x][player_y] = map->data[map->player_cell[0]][map->player_cell[1]];
-            map->data[map->player_cell[0]][map->player_cell[1]] = EMPTY;
-            map->player_cell[0] = player_x;
-            map->player_cell[1] = player_y;
-            return true;
+    if (0 <= player_x && player_x < (*map)->rows && 0 <= player_y && player_y < (*map)->cols) {
+        if ((*map)->data[player_x][player_y] == EMPTY) {
+            (*map)->data[player_x][player_y] = (*map)->data[(*map)->player_cell[0]][(*map)->player_cell[1]];
+            (*map)->data[(*map)->player_cell[0]][(*map)->player_cell[1]] = EMPTY;
+            (*map)->player_cell[0] = player_x;
+            (*map)->player_cell[1] = player_y;
+            if ((*map)->lantern_found) {
+                carrying_lantern(*map);
+            }
+            return 1;
         }
-        else if (map->data[player_x][player_y] == SNAKE) {
+        else if ((*map)->data[player_x][player_y] == SNAKE) {
             game_over();
         }
-        else if(map->data[player_x][player_y] == LANTERN) {
-            map->data[player_x][player_y] = map->data[map->player_cell[0]][map->player_cell[1]];
-            map->data[map->player_cell[0]][map->player_cell[1]] = EMPTY;
-            map->player_cell[0] = player_x;
-            map->player_cell[1] = player_y;
-            return true;
-        }
-        else {
-            return false;
+        else if ((*map)->data[player_x][player_y] == LANTERN) {
+            (*map)->data[player_x][player_y] = (*map)->data[(*map)->player_cell[0]][(*map)->player_cell[1]];
+            (*map)->data[(*map)->player_cell[0]][(*map)->player_cell[1]] = EMPTY;
+            (*map)->player_cell[0] = player_x;
+            (*map)->player_cell[1] = player_y;
+            pickup_lantern(*map);
+            return 1;
         }
     }
-    return false;
+    return 0;
 }
+
 
 void move_snake(Map* map) {
     int* direction = gen_direction();

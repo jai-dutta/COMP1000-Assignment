@@ -20,7 +20,7 @@ typedef void (*listFunc)(void* data);
 /* Forward Declarations */
 void print_int(void *data);
 void print_string(void *data);
-LinkedList* create_linked_list();
+LinkedList* create_linked_list(void);
 void insert_start(LinkedList* ll, void* data);
 void* remove_start(LinkedList* ll);
 void insert_last(LinkedList* ll, void* data);
