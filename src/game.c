@@ -61,6 +61,8 @@ int move_player(LinkedList* ll, Map** map) {
         default: return 0;
     }
 
+    insert_start(ll, copy_map(*map));
+    
     /* Movement checks */
     if (0 <= player_x && player_x < (*map)->rows && 0 <= player_y && player_y < (*map)->cols) {
         if ((*map)->data[player_x][player_y] == EMPTY) {

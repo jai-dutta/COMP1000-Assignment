@@ -7,7 +7,6 @@
 int main(int argc, const char* argv[]) {
     FILE* map_file;
     Map* map;
-    Map* copy;
     int player_move;
     LinkedList* game_ll = create_linked_list();
     
@@ -44,9 +43,6 @@ int main(int argc, const char* argv[]) {
         player_move = move_player(game_ll, &map);
         if(player_move == 1) {
             move_snake(map);
-            copy = copy_map(map);
-            insert_start(game_ll, copy);
-            
         }
     }
     return 0;
