@@ -39,7 +39,6 @@ int main(int argc, const char* argv[]) {
 
     while(1) {
         print_map(map);
-        print_linked_list(game_ll, print_int);
         player_move = move_player(game_ll, &map);
         if(player_move == 1) {
             move_snake(map);

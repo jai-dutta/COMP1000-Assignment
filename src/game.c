@@ -15,9 +15,6 @@ Controls process_input(void) {
 void undo_turn(LinkedList* ll, Map** map) {
     Map* prevMap = (Map*) remove_start(ll);
     if(prevMap != NULL) {
-        printf("Current x: %d Current Y: %d \n", (*map)->player_cell[0], (*map)->player_cell[1]);
-        printf("Previous x: %d Previous Y: %d \n", prevMap->player_cell[0], prevMap->player_cell[1]);
-
         free_map(*map);
         *map = prevMap;
     }
