@@ -111,6 +111,58 @@ int read_map(FILE* map_file, Map* map) {
     return 0;
 }
 
+void print_dark_map(Map* map) {
+    int i, j;
+
+    /* Clear screen */
+    system("clear");
+
+    /* +2 as the border goes around the edge of the playable map. */
+    for(i=0; i < map->cols + 2; i++) {
+        printf("*");
+    }
+    printf("\n");
+
+    for(i = 0; i < map->rows; i++) {
+        printf("*");
+        for(j=0; j < map->cols; j++) {
+            switch(map->data[i][j]) {
+                case EMPTY:
+                        printf(" ");
+                        break;
+                case WALL:
+                        printf("O");
+                        break;
+                case LANTERN:
+                        printf("@");
+                        break;
+                case PLAYER:
+                        printf("P");
+                        break;
+                case SNAKE:
+                        printf("~");
+                        break;
+                case TREASURE:
+                        printf("$");
+                        break;
+            }
+        }
+        printf("*\n");
+    }
+    /* +2 as the border goes around the edge of the playable map. */
+    for(i = 0; i < map->cols + 2; i++) {
+        printf("*");
+    }
+    printf("\n");
+
+    /* Print control menu */
+    printf("* Press W to go up\n");
+    printf("* Press S to go down\n");
+    printf("* Press A to go left\n");
+    printf("* Press D to go right\n");
+    printf("* Press U to go back\n");
+
+}
 
 void print_map(Map* map) {
     int i, j;

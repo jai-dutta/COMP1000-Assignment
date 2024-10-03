@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -ansi -pedantic -g
+CFLAGS = -Wall -ansi -pedantic
 EXEC = treasure
 OBJ = main.o game.o map.o input.o linkedlist.o random.o
 
@@ -26,9 +26,8 @@ linkedlist.o: linkedlist.c linkedlist.h
 random.o: random.c random.h
 	$(CC) $(CFLAGS) -c random.c
 
-
-dark:
-	
+dark: CFLAGS += -D DARK_MODE
+dark: clean $(EXEC)
 
 clean:
 	rm -f $(OBJ) $(EXEC)
