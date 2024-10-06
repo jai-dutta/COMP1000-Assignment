@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -ansi -pedantic
 EXEC = treasure
-OBJ = main.o game.o map.o input.o linkedlist.o random.o
+OBJ = main.o game.o map.o input.o linkedList.o random.o
 
 all: $(EXEC)
 
@@ -11,7 +11,7 @@ $(EXEC): $(OBJ)
 main.o: main.c game.h
 	$(CC) $(CFLAGS) -c main.c
 
-game.o: game.c game.h map.h input.h linkedlist.h
+game.o: game.c game.h map.h input.h linkedList.h
 	$(CC) $(CFLAGS) -c game.c
 
 map.o: map.c map.h
@@ -20,8 +20,8 @@ map.o: map.c map.h
 input.o: input.c input.h
 	$(CC) $(CFLAGS) -c input.c
 
-linkedlist.o: linkedlist.c linkedlist.h
-	$(CC) $(CFLAGS) -c linkedlist.c
+linkedList.o: linkedList.c linkedList.h
+	$(CC) $(CFLAGS) -c linkedList.c
 
 random.o: random.c random.h
 	$(CC) $(CFLAGS) -c random.c
