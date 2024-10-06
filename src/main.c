@@ -13,12 +13,12 @@ int main(int argc, const char* argv[]) {
     
     /* Argument Check */
     if(argc != 2) {
-        printf("Usage: ./treasure <map_file.txt>");
+        printf("Usage: ./treasure <map_file.txt>\n");
         return 1;
     }
     /* Ensure supplied file is a .txt file.*/
     if(!strstr(argv[1], ".txt")) {
-        printf("Usage: ./treasure <map_file.txt>");
+        printf("Usage: ./treasure <map_file.txt>\n");
         return 1;
     }
     printf("Opening file: %s\n", argv[1]);
@@ -31,8 +31,9 @@ int main(int argc, const char* argv[]) {
 
     map = create_map(map_file);
     if(read_map(map_file, map) != 0) {
-        printf("Error reading map");
+        printf("Error reading map.\n");
         fclose(map_file);
+        free_map(map);
         return 1;
     }
 
