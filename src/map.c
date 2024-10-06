@@ -1,10 +1,10 @@
 #include "map.h"
 #include <string.h>
+
 Map* create_map(FILE* map_file) {
     int rows, cols;
     int i, j;
     Map* map;
-
 
 
     map = (Map *)malloc(sizeof(Map));
@@ -28,27 +28,25 @@ Map* create_map(FILE* map_file) {
         return NULL;
     }
 
-    /* Read rows/cols and perform a check to see if they were succesfully read. */
+    /* Read rows/cols and perform a check to see if they were successfully read. */
     if(fscanf(map_file, "%d %d", &rows, &cols) != 2) {
         printf("Error reading map file rows and columns.\n");
-        free(map);
+        free_map(map);
         return NULL;
     }
 
+    map->lantern_found = 0;
+    map->turn_counter = 0;
     map->rows = rows;
     map->cols = cols;
     map->data = (int**)malloc(rows * sizeof(int*));
-    for(i = 0; i < rows; ++i) {
+    for(i = 0; i < rows; i++) {
         map->data[i] = (int*)malloc(cols * sizeof(int));
-
         if(map->data[i] == NULL) {
-            for (j = 0; j < i; ++j) {
+            for (j = 0; j < i; j++) {
                 free(map->data[j]);
             }
-            free(map->data);
-            free(map);
-            map = NULL;
-            return NULL;
+            free_map(map);
         }
     }
     return map;
@@ -82,12 +80,7 @@ int read_map(FILE* map_file, Map* map) {
                 } else {
                     fprintf(stderr, "Unknown error reading in map!\n");
                 }
-                /* Free memory and return */
-                for (j = 0; j < i; ++j) {
-                    free(map->data[j]);
-                }
-                free(map->data);
-                free(map);
+                free_map(map);
                 return 1;
             }
 
@@ -112,11 +105,20 @@ int read_map(FILE* map_file, Map* map) {
 }
 
 void print_dark_map(Map* map) {
+    int visibility_range;
     int i, j;
+    int player_x = map->player_cell[0];
+    int player_y = map->player_cell[1];
+
+    if(map->lantern_found == 1) {
+        visibility_range = 6;
+    } else {
+        visibility_range = 3;
+    }
 
     /* Clear screen */
     system("clear");
-
+    printf("Turn: %d\n", map->turn_counter);
     /* +2 as the border goes around the edge of the playable map. */
     for(i=0; i < map->cols + 2; i++) {
         printf("*");
@@ -126,25 +128,33 @@ void print_dark_map(Map* map) {
     for(i = 0; i < map->rows; i++) {
         printf("*");
         for(j=0; j < map->cols; j++) {
-            switch(map->data[i][j]) {
-                case EMPTY:
+            if(abs(player_x - i) + abs(player_y - j) <= visibility_range) {
+                switch(map->data[i][j]) {
+                    case EMPTY:
+                            printf(".");
+                            break;
+                    case WALL:
+                            printf("O");
+                            break;
+                    case LANTERN:
+                            printf("@");
+                            break;
+                    case PLAYER:
+                            printf("P");
+                            break;
+                    case SNAKE:
+                            printf("~");
+                            break;
+                    case TREASURE:
+                            printf("$");
+                            break;
+                    default:
                         printf(" ");
                         break;
-                case WALL:
-                        printf("O");
-                        break;
-                case LANTERN:
-                        printf("@");
-                        break;
-                case PLAYER:
-                        printf("P");
-                        break;
-                case SNAKE:
-                        printf("~");
-                        break;
-                case TREASURE:
-                        printf("$");
-                        break;
+                }
+            }
+            else {
+                printf(" ");
             }
         }
         printf("*\n");
@@ -170,6 +180,7 @@ void print_map(Map* map) {
     /* Clear screen */
     system("clear");
 
+    printf("Turn: %d\n", map->turn_counter);
     /* +2 as the border goes around the edge of the playable map. */
     for(i=0; i < map->cols + 2; i++) {
         printf("*");
@@ -197,6 +208,9 @@ void print_map(Map* map) {
                         break;
                 case TREASURE:
                         printf("$");
+                        break;
+                default:
+                        printf(" ");
                         break;
             }
         }
@@ -252,6 +266,7 @@ Map* copy_map(Map* original) {
     copy->snake_cell[1] = original->snake_cell[1];        
     copy->lantern_cell[0] = original->lantern_cell[0];
     copy->lantern_cell[1] = original->lantern_cell[1];
+    copy->turn_counter = original->turn_counter;
 
     
     copy->data = (int**)malloc(copy->rows * sizeof(int*));
@@ -264,7 +279,8 @@ Map* copy_map(Map* original) {
     return copy;
 }
 
-void free_map(Map* map) {
+void free_map(void* map_ptr) {
+    Map* map = (Map*)map_ptr;
     int i;
     for (i = 0; i < map->rows; i++) {
         free(map->data[i]);

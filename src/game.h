@@ -11,5 +11,5 @@ void pickup_lantern(Map* map);
 void carrying_lantern(Map* map);
 void move_snake(Map* map);
 void undo_turn(LinkedList* ll, Map** map);
-
+int game_over_check(Map* map);
 #endif

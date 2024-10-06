@@ -20,6 +20,7 @@ typedef struct {
     int* snake_cell;
     int* lantern_cell;
     int lantern_found;
+    int turn_counter;
 } Map;
 
 /* Forward Declarations */
@@ -27,5 +28,6 @@ Map* create_map(FILE* map_file);
 int read_map(FILE* map_file, Map* map);
 void print_map(Map* map);
 Map* copy_map(Map* original);
-void free_map(Map* map);
+void free_map(void* map_ptr);
+void print_dark_map(Map* map);
 #endif

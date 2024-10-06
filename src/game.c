@@ -19,9 +19,18 @@ void undo_turn(LinkedList* ll, Map** map) {
         *map = prevMap;
     }
 }
-void game_over(void) {
-    exit(1);
-    /* TO DO*/
+int game_over_check(Map* map) {
+    if(map->player_cell[0] == map->snake_cell[0] && map->player_cell[1] == map->snake_cell[1]) {
+        /* Print final map state */
+        #ifdef DARK_MODE
+                print_dark_map(map);
+        #else
+                print_map(map);
+        #endif
+        printf("Game Over! The snake ate you!\n");
+        return 0;
+    }
+    return 1;
 }
 
 void pickup_lantern(Map* map) {
@@ -72,10 +81,7 @@ int move_player(LinkedList* ll, Map** map) {
             }
             return 1;
         }
-        else if ((*map)->data[player_x][player_y] == SNAKE) {
-            game_over();
-        }
-        else if ((*map)->data[player_x][player_y] == LANTERN) {
+        if ((*map)->data[player_x][player_y] == LANTERN) {
             (*map)->data[player_x][player_y] = (*map)->data[(*map)->player_cell[0]][(*map)->player_cell[1]];
             (*map)->data[(*map)->player_cell[0]][(*map)->player_cell[1]] = EMPTY;
             (*map)->player_cell[0] = player_x;
@@ -89,21 +95,44 @@ int move_player(LinkedList* ll, Map** map) {
 
 
 void move_snake(Map* map) {
-    int* direction = gen_direction();
-    int snake_x = map->snake_cell[0];
-    int snake_y = map->snake_cell[1];
-    snake_x += direction[0];
-    snake_y += direction[1];
+    int has_moved = 0;
+    int* direction;
+    int snake_x, snake_y, i, j;
 
+    /* Check if player within a tile */
+    snake_x = map->snake_cell[0];
+    snake_y = map->snake_cell[1];
+    for(i = snake_x - 1; i <= snake_x + 1; i++) {
+        for(j = snake_y - 2; j <= snake_y + 2; j++) {
+            if(i >= 0 && i < map->rows && j >= 0 && j < map->cols) {
+                if(map->data[i][j] == PLAYER) {
+                    map->data[i][j] = map->data[map->snake_cell[0]][map->snake_cell[1]];
+                    map->data[map->snake_cell[0]][map->snake_cell[1]] = EMPTY;
+                    map->snake_cell[0] = i;
+                    map->snake_cell[1] = j;
+                    has_moved = 1;
+                }
+            }
+        }
+    }
 
-    /* Movement checks */
-    /* TO DO: CHECK IF HUMAN CLOSE TO SNEK */
-    if(0 <= snake_x && snake_x < map->rows && 0 <= snake_y && snake_y < map->cols) {
-        if(map->data[snake_x][snake_y] == EMPTY) {
-            map->data[snake_x][snake_y] = map->data[map->snake_cell[0]][map->snake_cell[1]];
-            map->data[map->snake_cell[0]][map->snake_cell[1]] = EMPTY;
-            map->snake_cell[0] = snake_x;
-            map->snake_cell[1] = snake_y;
+    /* Random Movement checks */
+    while(has_moved == 0) {
+        snake_x = map->snake_cell[0];
+        snake_y = map->snake_cell[1];
+        direction = gen_direction();
+        snake_x += direction[0];
+        snake_y += direction[1];
+        free(direction);
+        if(0 <= snake_x && snake_x < map->rows && 0 <= snake_y && snake_y < map->cols) {
+            if(map->data[snake_x][snake_y] == EMPTY) {
+                map->data[snake_x][snake_y] = map->data[map->snake_cell[0]][map->snake_cell[1]];
+                map->data[map->snake_cell[0]][map->snake_cell[1]] = EMPTY;
+                map->snake_cell[0] = snake_x;
+                map->snake_cell[1] = snake_y;
+                has_moved = 1;
+            }
         }
     }
 }
+

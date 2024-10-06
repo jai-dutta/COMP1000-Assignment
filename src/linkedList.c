@@ -64,7 +64,6 @@ void* remove_start(LinkedList* ll) {
     ListNode* removed_node = ll->head;
     void* retval;
     if(ll->count == 0) {
-        printf("Linked List is empty. Cannot remove start.");
         return NULL;
     }
     if(ll->count == 1) {
@@ -112,7 +111,6 @@ void* remove_last(LinkedList* ll) {
     void* retval;
 
     if(ll->count == 0) {
-        printf("Linked List is empty. Cannot remove last.");
         return NULL;
     }
     if(ll->count == 1) {
