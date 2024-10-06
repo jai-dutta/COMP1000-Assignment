@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.29)
 project(COMP1000_Assignment C)
 
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 90)
 
 include_directories(src)
 
