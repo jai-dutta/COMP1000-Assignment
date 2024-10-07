@@ -30,8 +30,24 @@ int game_over_check(Map* map) {
         printf("Game Over! The snake ate you!\n");
         return 0;
     }
+    if(map->treasure_found == 1) {
+        #ifdef DARK_MODE
+                print_dark_map(map);
+        #else
+                print_map(map);
+        #endif
+        printf("You win! Treasure has been found!\n");
+        return 0;
+    }
+
+    /* returns 1 for non game over condition */
     return 1;
 }
+
+void find_treasure(Map* map) {
+    map->treasure_found = 1;
+}
+
 
 void pickup_lantern(Map* map) {
     map->lantern_found = 1;
@@ -45,6 +61,8 @@ void carrying_lantern(Map* map) {
 /* Returns 1 if player moved */
 int move_player(LinkedList* ll, Map** map) {
     Controls direction = process_input();
+
+    /* This represents the possible NEW location of the player*/
     int player_x = (*map)->player_cell[0];
     int player_y = (*map)->player_cell[1];
 
@@ -81,6 +99,14 @@ int move_player(LinkedList* ll, Map** map) {
             }
             return 1;
         }
+        if ((*map)->data[player_x][player_y] == TREASURE) {
+            (*map)->data[player_x][player_y] = (*map)->data[(*map)->player_cell[0]][(*map)->player_cell[1]];
+            (*map)->data[(*map)->player_cell[0]][(*map)->player_cell[1]] = EMPTY;
+            (*map)->player_cell[0] = player_x;
+            (*map)->player_cell[1] = player_y;
+            find_treasure(*map);
+            return 1;
+        }
         if ((*map)->data[player_x][player_y] == LANTERN) {
             (*map)->data[player_x][player_y] = (*map)->data[(*map)->player_cell[0]][(*map)->player_cell[1]];
             (*map)->data[(*map)->player_cell[0]][(*map)->player_cell[1]] = EMPTY;
@@ -103,7 +129,7 @@ void move_snake(Map* map) {
     snake_x = map->snake_cell[0];
     snake_y = map->snake_cell[1];
     for(i = snake_x - 1; i <= snake_x + 1; i++) {
-        for(j = snake_y - 2; j <= snake_y + 2; j++) {
+        for(j = snake_y - 1; j <= snake_y + 1; j++) {
             if(i >= 0 && i < map->rows && j >= 0 && j < map->cols) {
                 if(map->data[i][j] == PLAYER) {
                     map->data[i][j] = map->data[map->snake_cell[0]][map->snake_cell[1]];

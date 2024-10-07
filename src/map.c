@@ -36,6 +36,7 @@ Map* create_map(FILE* map_file) {
     }
 
     map->lantern_found = 0;
+    map->treasure_found = 0;
     map->turn_counter = 0;
     map->rows = rows;
     map->cols = cols;
@@ -260,6 +261,7 @@ Map* copy_map(Map* original) {
     copy->rows = original->rows;
     copy->cols = original->cols;
     copy->lantern_found = original->lantern_found;
+    copy->treasure_found = original->treasure_found;
     copy->player_cell[0] = original->player_cell[0];
     copy->player_cell[1] = original->player_cell[1];
     copy->snake_cell[0] = original->snake_cell[0];

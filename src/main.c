@@ -26,7 +26,6 @@ int main(int argc, const char* argv[]) {
     map_file = fopen(argv[1], "r");
     if(map_file == NULL) {
         perror("fopen");
-        fclose(map_file);
     }
 
     map = create_map(map_file);

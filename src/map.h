@@ -19,6 +19,7 @@ typedef struct {
     int* player_cell;
     int* snake_cell;
     int* lantern_cell;
+    int treasure_found;
     int lantern_found;
     int turn_counter;
 } Map;
