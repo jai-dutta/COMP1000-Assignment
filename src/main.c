@@ -4,13 +4,22 @@
 #include <stdio.h>
 #include <string.h>
 
+/*
+ * Main Function
+ *      Author: Jai Dutta
+ *      Student ID: 22073372
+ *      Unit: COMP1000 - Unix and C Programming
+ */
+
+
+
 int main(int argc, const char* argv[]) {
     /* Declare variables */
     FILE* map_file;
     Map* map;
     int player_move;
     /* Declare and initialise linked list */
-    LinkedList* game_ll = create_linked_list()
+    LinkedList* game_ll = create_linked_list();
     /* Declare running variable - while 1, the game loop executes. Changes to 0 on a game over condition */
     int running = 1;
     

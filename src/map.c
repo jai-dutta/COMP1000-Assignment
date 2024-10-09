@@ -1,6 +1,18 @@
 #include "map.h"
 #include <string.h>
 
+
+/*
+ * Map
+ * This file handles creating Map struct and associated functions (file I/O, freeing, copying), and handles the game map and display.
+ *      Author: Jai Dutta
+ *      Student ID: 22073372
+ *      Unit: COMP1000 - Unix and C Programming
+ */
+
+/* Allocate and initialise Map struct and values
+ * Returns Map pointer.
+ */
 Map* create_map(FILE* map_file) {
     int rows, cols;
     int i, j;
@@ -54,7 +66,6 @@ Map* create_map(FILE* map_file) {
 }
 
 /* Returns 0 for success, or non zero for failure.*/
-/* NOTE TO SELF: ENSURE YOU CHECK! */
 int read_map(FILE* map_file, Map* map) {
     int i, j;
     int successful_scan;
@@ -105,6 +116,7 @@ int read_map(FILE* map_file, Map* map) {
     return 0;
 }
 
+/* Print the map with limited visibility (dark mode) */
 void print_dark_map(Map* map) {
     int visibility_range;
     int i, j;
@@ -129,6 +141,7 @@ void print_dark_map(Map* map) {
     for(i = 0; i < map->rows; i++) {
         printf("*");
         for(j=0; j < map->cols; j++) {
+            /* Manhattan distance */
             if(abs(player_x - i) + abs(player_y - j) <= visibility_range) {
                 switch(map->data[i][j]) {
                     case EMPTY:
@@ -174,7 +187,7 @@ void print_dark_map(Map* map) {
     printf("* Press U to go back\n");
 
 }
-
+/* Prints the map and controls */
 void print_map(Map* map) {
     int i, j;
 
@@ -232,6 +245,7 @@ void print_map(Map* map) {
 
 }
 
+/* Deep copies the map for the undo functionality (Map is copied each turn and stored in LinkedList) */
 Map* copy_map(Map* original) {
     int i, j;
     Map* copy = (Map*)malloc(sizeof(Map));

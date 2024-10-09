@@ -6,9 +6,12 @@
 /*
  * Doubly-linked, doubly-ended Linked List. 
  *      Author: Jai Dutta
+ *      Student ID: 22073372
  *      Unit: COMP1000 - Unix and C Programming
  */
 
+
+/* Utility functions for freeing various types of data (none used in this assignment, free_map in map.c is used instead.) */
 void print_int(void *data) {
     printf("%d\n", *(int*)data);
 }
@@ -30,6 +33,7 @@ void free_2d_array(int **data, int rows) {
     data = NULL;
 }
 
+/* Allocate and initialise linkedlist struct values */
 LinkedList* create_linked_list(void) {
     LinkedList* linked_list = (LinkedList *)malloc(sizeof(LinkedList));
     linked_list->count = 0;
@@ -38,7 +42,7 @@ LinkedList* create_linked_list(void) {
 
     return linked_list;
 }
-
+/* Insert a node at the start of the Linked List */
 void insert_start(LinkedList* ll, void* data) {
     ListNode* new_node = (ListNode*)malloc(sizeof(ListNode));
     new_node->value = data;
@@ -59,7 +63,8 @@ void insert_start(LinkedList* ll, void* data) {
     }
     ll->count++;
 }
-
+/**/
+/* Remove and return a node at the start of the linked list. */
 void* remove_start(LinkedList* ll) {
     ListNode* removed_node = ll->head;
     void* retval;
@@ -79,13 +84,12 @@ void* remove_start(LinkedList* ll) {
     ll->head->prev = NULL;
     ll->count--;
 
-    
-    
     free(removed_node);
 
     return retval;
 }
 
+/* Insert a node at the tail of the linked list. */
 void insert_last(LinkedList* ll, void* data) {
     ListNode* new_node;
 
@@ -106,6 +110,7 @@ void insert_last(LinkedList* ll, void* data) {
     ll->count++;
 }
 
+/* Remove and return a node at the tail of the linked list. */
 void* remove_last(LinkedList* ll) {
     ListNode* removed_node;
     void* retval;
@@ -133,6 +138,8 @@ void* remove_last(LinkedList* ll) {
 
     return retval;
 }
+
+/* Print each node in the Linked List (not used in this assignment) */
 void print_linked_list(LinkedList* ll, listFunc funcPtr) {
     ListNode* current = ll->head;
     printf("LinkedList count: %d \n", ll->count);
@@ -142,6 +149,7 @@ void print_linked_list(LinkedList* ll, listFunc funcPtr) {
     }
 }
 
+/* Free the linked list using a function pointer to the appropriate freeing function */
 void free_linked_list(LinkedList* ll, listFunc funcPtr) {
     ListNode* current = ll->head;
     ListNode* next_node;
