@@ -40,6 +40,7 @@ int main(int argc, const char* argv[]) {
     map_file = fopen(argv[1], "r");
     if(map_file == NULL) {
         perror("fopen");
+        return 1;
     }
     /* Call the create_map function to read in file contents and initialise the map struct and 2D array of map data
      * This function returns 0 if the map was created successfully, and non-zero for failure.

@@ -27,23 +27,32 @@ Map* create_map(FILE* map_file) {
     map->player_cell = (int *)malloc(sizeof(int) * 2);
     if(map->player_cell == NULL) {
         printf("Error allocating memory for player position!");
+        free(map);
         return NULL;
     }
     map->snake_cell = (int *)malloc(sizeof(int) * 2);
     if(map->snake_cell == NULL) {
         printf("Error allocating memory for snake position!");
+        free(map->player_cell);
+        free(map);
         return NULL;
     }
     map->lantern_cell = (int *)malloc(sizeof(int) * 2);
     if(map->lantern_cell == NULL) {
         printf("Error allocating memory for lantern position!");
+        free(map->player_cell);
+        free(map->snake_cell);
+        free(map);
         return NULL;
     }
 
     /* Read rows/cols and perform a check to see if they were successfully read. */
     if(fscanf(map_file, "%d %d", &rows, &cols) != 2) {
         printf("Error reading map file rows and columns.\n");
-        free_map(map);
+        free(map->player_cell);
+        free(map->snake_cell);
+        free(map->lantern_cell);
+        free(map);
         return NULL;
     }
 
@@ -59,13 +68,18 @@ Map* create_map(FILE* map_file) {
             for (j = 0; j < i; j++) {
                 free(map->data[j]);
             }
-            free_map(map);
+            free(map->data);
+            free(map->player_cell);
+            free(map->snake_cell);
+            free(map->lantern_cell);
+            free(map);
+            return NULL;
         }
     }
     return map;
 }
 
-/* Returns 0 for success, or non zero for failure.*/
+/* Returns 0 for success, or non-zero for failure.*/
 int read_map(FILE* map_file, Map* map) {
     int i, j;
     int successful_scan;
@@ -249,25 +263,33 @@ void print_map(Map* map) {
 Map* copy_map(Map* original) {
     int i, j;
     Map* copy = (Map*)malloc(sizeof(Map));
+
     if(copy == NULL) {
         printf("Error allocating memory for map\n");
         return NULL;
     }
-    
 
     copy->player_cell = (int *)malloc(sizeof(int) * 2);
     if(copy->player_cell == NULL) {
         printf("Error allocating memory for player position!");
+        free(copy);
         return NULL;
     }
+
     copy->snake_cell = (int *)malloc(sizeof(int) * 2);
     if(copy->snake_cell == NULL) {
         printf("Error allocating memory for snake position!");
+        free(copy->player_cell);
+        free(copy);
         return NULL;
     }
+
     copy->lantern_cell = (int *)malloc(sizeof(int) * 2);
     if(copy->lantern_cell == NULL) {
         printf("Error allocating memory for lantern position!");
+        free(copy->player_cell);
+        free(copy->snake_cell);
+        free(copy);
         return NULL;
     }
 
@@ -279,15 +301,27 @@ Map* copy_map(Map* original) {
     copy->player_cell[0] = original->player_cell[0];
     copy->player_cell[1] = original->player_cell[1];
     copy->snake_cell[0] = original->snake_cell[0];
-    copy->snake_cell[1] = original->snake_cell[1];        
+    copy->snake_cell[1] = original->snake_cell[1];
     copy->lantern_cell[0] = original->lantern_cell[0];
     copy->lantern_cell[1] = original->lantern_cell[1];
     copy->turn_counter = original->turn_counter;
 
-    
+
     copy->data = (int**)malloc(copy->rows * sizeof(int*));
     for (i = 0; i < copy->rows; i++) {
         copy->data[i] = (int*)malloc(copy->cols * sizeof(int));
+        if(copy->data[i] == NULL) {
+            printf("Error allocating memory for map copy data!");
+            for(j = 0; j < i; j++) {
+                free(copy->data[j]);
+            }
+            free(copy->data);
+            free(copy->player_cell);
+            free(copy->snake_cell);
+            free(copy->lantern_cell);
+            free(copy);
+            return NULL;
+        }
         for(j = 0; j<copy->cols; j++) {
             copy->data[i][j] = original->data[i][j];
         }
