@@ -22,7 +22,7 @@ make dark
 
 ### Usage  
 Run the game with a map file:  
-Copy./treasure <map_file.txt>  
+./treasure <map_file.txt>  
 
 ### Controls  
 'w': Move up  
